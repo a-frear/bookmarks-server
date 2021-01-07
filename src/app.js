@@ -6,6 +6,7 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const bookmarksRouter = require('./bookmarks/bookmarks-router')
 const logger = require('./logger')
+const BookmarksService = require('./bookmarks-service')
 
 const app = express()
 
@@ -28,6 +29,15 @@ app.use(function validateBearerToken(req, res, next) {
   }
   // move to the next middleware
   next()
+})
+
+app.get('/bookmarks', (req, res, next) => {
+  const knexInstance = req.app.get('db')
+  ArticlesService.getAllBookmarks(knexInstance)
+    .then(bookmarks => {
+      res.json(bookmarks)
+    })
+    .catch(next)
 })
 
 app.use(bookmarksRouter);
