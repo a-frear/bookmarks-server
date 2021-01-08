@@ -1,3 +1,2 @@
-TRUNCATE TABLE bookmarks
-RESTART IDENTITY;
+TRUNCATE TABLE bookmarks;
 
