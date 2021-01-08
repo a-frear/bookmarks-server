@@ -31,15 +31,6 @@ app.use(function validateBearerToken(req, res, next) {
   next()
 })
 
-app.get('/bookmarks', (req, res, next) => {
-  const knexInstance = req.app.get('db')
-  ArticlesService.getAllBookmarks(knexInstance)
-    .then(bookmarks => {
-      res.json(bookmarks)
-    })
-    .catch(next)
-})
-
 app.use(bookmarksRouter);
 
 app.use((error, req, res, next) => {
@@ -50,6 +41,33 @@ app.use((error, req, res, next) => {
       response = { error }
     }
     res.status(500).json(response)
+  })
+
+  app.get('/bookmarks', (req, res, next) => {
+    const knexInstance = req.app.get('db')
+    BookmarksService.getAllBookmarks(knexInstance)
+      .then(bookmarks => {
+        res.json(bookmarks)
+      })
+      .catch(next)
+  })
+
+  app.get('/bookmarks/:bookmarks_id', (req, res, next) => {
+    const knexInstance = req.app.get('db')
+    BookmarksService.getById(knexInstance, req.params.bookmarks_id)
+      .then(bookmark => {
+        if (!bookmark) {
+          return res.status(404).json({
+            error: { message: `Bookmark doesn't exist` }
+          })
+        }
+        res.json(bookmark)
+      })
+      .catch(next)
+  })
+  
+  app.get('/', (req, res) => {
+    res.send('Hello, world!')
   })
 
 module.exports = app

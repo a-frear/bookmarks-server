@@ -1,4 +1,4 @@
-function bookmarksArray()
+function makeBookmarksArray()
 {
     return [
   { id: 1,
@@ -19,4 +19,4 @@ function bookmarksArray()
 ]
 }
 
-module.exports = { bookmarksArray }
+module.exports = { makeBookmarksArray }
